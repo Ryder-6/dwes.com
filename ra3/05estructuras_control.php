@@ -112,12 +112,14 @@ if( $edad >= 18 and $edad <= 65 ) { ?>
 <?php
 }
 else { ?>
-  <h3>Servicios para menores o jubilados</h3>
+  <h3>Servicios para menores o jubilados</h3> <h1></h1>
   <ul>
     <li>Taichi</li>
     <li>Pilates</li>
+    
     <li>Yoga</li>
   </ul>
+  
 <?php
 }
 ?>
