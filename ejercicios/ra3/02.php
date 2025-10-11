@@ -85,16 +85,20 @@ if ($_SERVER['REQUEST_METHOD'] == "POST") {
   $titulo_validado = $datos_saneados['titulo'] ?? '';
 
   $autores_validado = [];
-  foreach ($datos_saneados['autores'] as $autor) {
-    if (array_key_exists($autor, $autores)) {
-      $autores_validado[] =  $autores[$autor];
+  if (!empty($datos_saneados['autores'])) {
+    foreach ($datos_saneados['autores'] as $autor) {
+      if (array_key_exists($autor, $autores)) {
+        $autores_validado[] =  $autores[$autor];
+      }
     }
   }
 
   $generos_validado = [];
-  foreach ($datos_saneados['generos'] as $genero) {
-    if (array_key_exists($genero, $generos)) {
-      $generos_validado[] = $generos[$genero];
+  if (!empty($datos_saneados['generos'])) {
+    foreach ($datos_saneados['generos'] as $genero) {
+      if (array_key_exists($genero, $generos)) {
+        $generos_validado[] = $generos[$genero];
+      }
     }
   }
 
@@ -155,9 +159,9 @@ if ($_SERVER['REQUEST_METHOD'] == "POST") {
       <?php foreach ($resultado_libros as $key => $value) : ?>
         <tr>
           <td><?= $key ?></td>
-          <td><?= $value['titulo']?></td>
-          <td><?= $value['genero']?></td>
-          <td><?= $value['autor']?></td>
+          <td><?= $value['titulo'] ?></td>
+          <td><?= $value['genero'] ?></td>
+          <td><?= $value['autor'] ?></td>
         </tr>
       <?php endforeach; ?>
     </tbody>
