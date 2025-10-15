@@ -76,7 +76,7 @@
     $datos_validados['telefono'] = is_int($datos_saneados['telefono']) ? $datos_saneados['telefono'] : '';
 
     $datos_validados['tipo'] = $datos_saneados['tipo'];
-    $es_vegetariana = boolval($datos_validados['tipo']);
+    $es_vegetariana = filter_var($datos_validados['tipo'],FILTER_VALIDATE_BOOLEAN);
 
     if ($es_vegetariana && !empty($datos_saneados['ingredientes_veg'])) {
       foreach ($datos_saneados['ingredientes_veg'] as $ingrediente) {
