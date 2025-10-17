@@ -72,38 +72,80 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
     if ($datos_saneados['destino'] && array_key_exists($datos_saneados['destino'], $destinos)) {
       $datos_validados['destino'] = $destinos[$datos_saneados['destino']];
       $datos_validados['compania'] = array_key_exists($datos_saneados['compania'], $compania_aerea) ? $compania_aerea[$datos_saneados['compania']] : $compania_aerea['ma'];
-      $datos_validados['hotel'] = array_key_exists($datos_saneados['hotel'], $hoteles) ? $hoteles[$datos_saneados['hotel']] : $hoteles['3s'];
+      $datos_validados['hotel'] = array_key_exists($datos_saneados['hotel'], $hoteles) ? $datos_saneados['hotel']  : '3s';
 
       $datos_validados['desayuno'] = filter_var($datos_saneados['desayuno'], FILTER_VALIDATE_BOOL);
 
       if (filter_var($datos_saneados['n_personas'], FILTER_VALIDATE_INT) && 5 <= $datos_saneados['n_personas'] && $datos_saneados['n_personas'] <= 10) {
         $datos_validados['n_personas'] = $datos_saneados['n_personas'];
         if (in_array($datos_saneados['n_dias'], $dias)) {
-          $datos_validados['n_dias'] = filter_var($datos_validados, FILTER_VALIDATE_INT);
+          $datos_validados['n_dias'] = filter_var($datos_saneados['n_dias'], FILTER_VALIDATE_INT);
 
           $datos_validados['visita'] = filter_var($datos_saneados['visita'], FILTER_VALIDATE_BOOL);
           $datos_validados['bus'] = filter_var($datos_saneados['bus'], FILTER_VALIDATE_BOOL);
           $datos_validados['maleta'] = filter_var($datos_saneados['maleta'], FILTER_VALIDATE_BOOL);
           $datos_validados['seguro'] = filter_var($datos_saneados['seguro'], FILTER_VALIDATE_BOOL);
-          
-          
+
+
           //3. presentacion
-          $precio_persona_dia = 
-            $datos_validados['destino']['precio']+
-            $datos_validados['hotel']+
-            $datos_validados['compania']['precio']+
-            ($datos_validados['desayuno'] ? $desayuno_precio : 0)+
-            ($datos_validados['bus'] ? $bus_turistico : 0)+
-            ($datos_validados['maleta'] ? $segunda_maleta : 0)+
+          $precio_persona_dia =
+            $datos_validados['destino']['precio'] +
+            $hoteles[$datos_validados['hotel']] +
+            $datos_validados['compania']['precio'] +
+            ($datos_validados['desayuno'] ? $desayuno_precio : 0) +
+            ($datos_validados['bus'] ? $bus_turistico : 0) +
+            ($datos_validados['maleta'] ? $segunda_maleta : 0) +
             ($datos_validados['seguro'] ? $seguro_viaje : 0);
 
           $precio_persona_total = $precio_persona_dia * $datos_validados['n_dias'] + ($datos_validados['visita'] ? ($visita_guiada / $datos_validados['n_personas']) : 0);
-          
+
           $precio_grupo_dia = $precio_persona_dia * $datos_validados['n_personas'];
           $precio_grupo_total = $precio_persona_total * $datos_validados['n_personas'];
 
 
           //en este punto ya funciona, hay que hacer el desglose en una tabla
+
+?>
+          <h1>Presupuesto</h1>
+          <table border="1">
+            <thead>
+              <tr>
+                <th> nombre </th>
+                <th> telefono </th>
+                <th> email </th>
+                <th> destino </th>
+                <th> compania </th>
+                <th> hotel </th>
+                <th> desayuno </th>
+                <th> n_personas </th>
+                <th> n_dias </th>
+                <th> visita </th>
+                <th> bus </th>
+                <th> maleta </th>
+                <th> seguro </th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr>
+                <td><?= $datos_validados['nombre'] ?></td>
+                <td><?= $datos_validados['telefono'] ?></td>
+                <td><?= $datos_validados['email'] ?></td>
+                <td><?= $datos_validados['destino']['name'] ?> => <?= $datos_validados['destino']['precio'] ?></td>
+                <td><?= $datos_validados['compania']['name'] ?> => <?= $datos_validados['compania']['precio'] ?></td>
+                <td><?= $datos_validados['hotel']?> => <?=$hoteles[$datos_validados['hotel']]?></td>
+                <td><?= $datos_validados['desayuno'] ? "si $desayuno_precio" : 'no' ?></td>
+                <td><?= $datos_validados['n_personas'] ?></td>
+                <td><?= $datos_validados['n_dias'] ?></td>
+                <td><?= $datos_validados['visita'] ? "Si $visita_guiada" : "No"?></td>
+                <td><?= $datos_validados['bus'] ? "Si $bus_turistico" : 'no' ?></td>
+                <td><?= $datos_validados['maleta'] ? "Si $segunda_maleta" : "No"?></td>
+                <td><?= $datos_validados['seguro'] ? "Si $seguro_viaje" : "No" ?></td>
+              </tr>
+            </tbody>
+          </table>
+
+
+  <?php
 
 
 
@@ -119,11 +161,10 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
   } else {
     echo "<h2>Error, faltan datos identificativos</h2>";
   }
-
 }
 
 if ($_SERVER['REQUEST_METHOD'] == 'GET') {
-?>
+  ?>
   <h1>viaje turístico</h1>
   <form action="<?= $_SERVER['PHP_SELF'] ?>" method="post">
     <fieldset>
@@ -181,7 +222,7 @@ if ($_SERVER['REQUEST_METHOD'] == 'GET') {
         <legend>Numero de dias</legend>
         <div>
           <?php foreach ($dias as $key) : ?>
-            <input type="radio" name="n_dias" id="<?= $key ?>" value="<?= $key ?>" >
+            <input type="radio" name="n_dias" id="<?= $key ?>" value="<?= $key ?>">
             <label for="n_dias"><?= $key ?></label>
             <br>
           <?php endforeach; ?>
