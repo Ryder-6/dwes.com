@@ -73,7 +73,7 @@
 
     $datos_validados['nombre'] = $datos_saneados['nombre'] ? $datos_saneados['nombre'] : '';
     $datos_validados['direccion'] = $datos_saneados['direccion'] ? $datos_saneados['direccion'] : '';
-    $datos_validados['telefono'] = is_int($datos_saneados['telefono']) ? $datos_saneados['telefono'] : '';
+    $datos_validados['telefono'] = $datos_saneados['telefono'] ? $datos_saneados['telefono'] : '';
 
     $datos_validados['tipo'] = $datos_saneados['tipo'];
     $es_vegetariana = filter_var($datos_validados['tipo'],FILTER_VALIDATE_BOOLEAN);
@@ -109,8 +109,8 @@
 
     $precio_final_unidad = $precio_base_pizza + ($es_vegetariana ? $incremento_vegetariana : $incremento_no_vegetariana);
 
-    foreach ($datos_validados['ingredientes'] as $key => $value) {
-      $precio_final_unidad += $value['precio'];
+    foreach ($datos_validados['ingredientes'] as $key) {
+      $precio_final_unidad += $key['precio'];
     }
     $precio_final_unidad += $datos_validados['extra_queso'] ? $incremento_extra_queso : 0;
     $precio_final_unidad += $datos_validados['bordes'] ? $incremento_bordes : 0;
@@ -118,7 +118,7 @@
     $precio_final_total = $precio_final_unidad * $datos_validados['n_pizzas'];
 
   ?>
-    <table>
+    <table border="1">
       <thead>
         <tr>
           <th>Nombre</th>

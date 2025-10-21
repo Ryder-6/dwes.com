@@ -132,13 +132,13 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
                 <td><?= $datos_validados['email'] ?></td>
                 <td><?= $datos_validados['destino']['name'] ?> => <?= $datos_validados['destino']['precio'] ?></td>
                 <td><?= $datos_validados['compania']['name'] ?> => <?= $datos_validados['compania']['precio'] ?></td>
-                <td><?= $datos_validados['hotel']?> => <?=$hoteles[$datos_validados['hotel']]?></td>
+                <td><?= $datos_validados['hotel'] ?> => <?= $hoteles[$datos_validados['hotel']] ?></td>
                 <td><?= $datos_validados['desayuno'] ? "si $desayuno_precio" : 'no' ?></td>
                 <td><?= $datos_validados['n_personas'] ?></td>
                 <td><?= $datos_validados['n_dias'] ?></td>
-                <td><?= $datos_validados['visita'] ? "Si $visita_guiada" : "No"?></td>
+                <td><?= $datos_validados['visita'] ? "Si $visita_guiada" : "No" ?></td>
                 <td><?= $datos_validados['bus'] ? "Si $bus_turistico" : 'no' ?></td>
-                <td><?= $datos_validados['maleta'] ? "Si $segunda_maleta" : "No"?></td>
+                <td><?= $datos_validados['maleta'] ? "Si $segunda_maleta" : "No" ?></td>
                 <td><?= $datos_validados['seguro'] ? "Si $seguro_viaje" : "No" ?></td>
               </tr>
             </tbody>

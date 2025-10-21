@@ -17,6 +17,8 @@
     'cm' => 'Centro médico'
   ];
 
+  $lista_error = [];
+
   ?>
 
   <?php if ($_SERVER['REQUEST_METHOD'] == 'POST') {
@@ -31,14 +33,16 @@
     $datos_saneados = filter_input_array(INPUT_POST, $saneamiento, true);
 
     // 2. validacion
-    if (filter_var($datos_saneados['email'], FILTER_VALIDATE_EMAIL)) {
-      $datos_validados['email'] = $datos_saneados['email'];
+    
+      $datos_validados['email'] = filter_var($datos_saneados['email'], FILTER_VALIDATE_EMAIL)? $datos_saneados['email'] : ($lista_error[] = 'Email invalido');
       $datos_validados['autorizo'] = filter_var($datos_saneados['autorizo'], FILTER_VALIDATE_BOOLEAN); 
-      $datos_validados['proyecto'] = array_key_exists($datos_saneados['proyecto'], $proyectos) ? $proyectos[$datos_saneados['proyecto']] : '';
+      $datos_validados['proyecto'] = array_key_exists($datos_saneados['proyecto'], $proyectos) ? $datos_saneados['proyecto'] : ($lista_error[] = 'proyecto invalido');
       $datos_validados['propuesta'] = filter_var($datos_saneados['propuesta'], FILTER_SANITIZE_SPECIAL_CHARS);
 
       // 3. presentacion
-      ?>
+      if (!$lista_error) {
+        # code...
+        ?>
       <table>
         <thead>
           <tr>
@@ -52,7 +56,7 @@
           <tr>
             <td><?=$datos_validados['email']?></td>
             <td><?=$datos_validados['autorizo'] ? 'Si' : 'No' ?></td>
-            <td><?=$datos_validados['proyecto']?></td>
+            <td><?=$proyectos[$datos_validados['proyecto']]?></td>
             <td><?=$datos_validados['propuesta']?></td>
           </tr>
         </tbody>
@@ -61,11 +65,13 @@
       
       <?php
 
+}else {
+  foreach ($lista_error as $error) {
+    echo "<h2>Error: $error </h2>";
+  }
+}
 
-    }else{
-      echo '<h2>email incorrecto</h2>';
-    }
-    
+
 
 
   } ?>
@@ -78,16 +84,17 @@
     <legend>Propuestas</legend>
     <form action="<?= $_SERVER['PHP_SELF'] ?>" method="POST">
       <label for="email">email</label>
-      <input type="email" name="email" id="email" <?= isset($_POST['email']) ? $_POST['email'] : '' ?>>
+      <input type="email" name="email" id="email" value="<?= isset($datos_validados['email']) ? $datos_validados['email'] : '' ?>">
+  
 
       <label for="autorizo">Autorizo registro</label>
-      <input type="checkbox" name="autorizo" id="autorizo" <?= isset($_POST['propuesta']) ? 'checked' : '' ?>>
+      <input type="checkbox" name="autorizo" id="autorizo" <?= isset($datos_validados['propuesta']) ? 'checked' : '' ?>>
 
       <label for="proyecto">Proyecto</label>
       <select name="proyecto" id="proyecto">
         <option value="">Default</option>
         <?php foreach ($proyectos as $key => $value): ?>
-          <option value="<?= $key ?>" <?= (isset($_POST['proyecto']) && $_POST['proyecto'] === $key) ? 'select' : '' ?>>
+          <option value="<?= $key ?>" <?= (isset($datos_validados['proyecto']) && $datos_validados['proyecto'] === $key) ? 'selected' : '' ?>>
             <?= $value ?>
           </option>
         <?php endforeach; ?>
@@ -95,7 +102,7 @@
       <br>
       <label for="propuesta">Propuesta</label>
       <br>
-      <textarea name="propuesta" id="propuesta" cols="30" rows="10"> <?= isset($_POST['propuesta']) ? $_POST['propuesta'] : '' ?></textarea>
+      <textarea name="propuesta" id="propuesta" cols="30" rows="10"><?= isset($datos_validados['propuesta']) ? trim($datos_validados['propuesta']) : '' ?></textarea>
 
 <br>
       <button type="submit">enviar propuesta</button>
