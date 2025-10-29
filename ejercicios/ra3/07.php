@@ -81,8 +81,6 @@ function guardar_fichero($fichero, $tipos_permitidos = [], $tamanio_maximo = 102
     if (!is_uploaded_file($tmp_name) || !move_uploaded_file($tmp_name, $nombre_fichero)) {
       error(9);
     }
-
-
   }
 }
 
@@ -142,7 +140,7 @@ if ($_SERVER['REQUEST_METHOD'] == 'GET') {
       <input type="hidden" name="MAX_FILE_SIZE" value="<?= $tamanio_maximo ?>">
 
       <label for="dni">DNI</label>
-      <input type="text" name="dni" id="dni" >
+      <input type="text" name="dni" id="dni">
 
       <label for="fichero">Curriculum</label>
       <input type="file" name="fichero" id="fichero" accept="application/pdf">
