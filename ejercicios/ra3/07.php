@@ -31,7 +31,7 @@ function error(int $codigo_error): void
 
 $tipos_mime_aceptados = ['application/pdf'];
 $tamanio_maximo = 1024 * 1024;
-define('DIRECTORIO_SUBIDA', $_SERVER['DOCUMENT_ROOT'] . "/curriculums");
+define('DIRECTORIO_SUBIDA', $_SERVER['DOCUMENT_ROOT'] . "/ra3/uploads/curriculums");
 
 function guardar_fichero($fichero, $tipos_permitidos = [], $tamanio_maximo = 1024 * 1024, $nombre = "")
 {
@@ -69,10 +69,7 @@ function guardar_fichero($fichero, $tipos_permitidos = [], $tamanio_maximo = 102
     if (!is_dir(DIRECTORIO_SUBIDA)) {
       if (!mkdir(DIRECTORIO_SUBIDA, 0755, true) && !is_dir(DIRECTORIO_SUBIDA)) {
         /*
-        sudo usermod -aG www-data $USER
-        sudo chgrp -R www-data /var/www/dwes.com
-        sudo chmod -R 775 /var/www/dwes.com
-        sudo find /var/www/dwes.com -type d -exec chmod g+s {} \;
+        Dar permisos de creacion
         */
         error(8);
       }
