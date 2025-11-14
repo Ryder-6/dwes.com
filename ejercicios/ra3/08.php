@@ -14,7 +14,7 @@ function error($n_error)
   ];
 }
 
-function guarda_fichero($fichero, $tipos_permitidos, $nombre = "")
+function guarda_fichero($fichero, $tipos_permitidos, $datos_validados )
 {
   $name = $fichero['name'];
   $tmp_name = $fichero['tmp_name'];
@@ -29,9 +29,13 @@ function guarda_fichero($fichero, $tipos_permitidos, $nombre = "")
     error(2);
   }
 
-  if ($error == UPLOAD_ERR_FORM_SIZE) {
+  $extension = implode('/', $type);
+  $max_file = 'max_file_' . $extension;
+
+  if ($size > $datos_validados[$max_file] || !$datos_validados[$max_file]) {
     error(3);
   }
+  
 }
 
 function lista_ficheros() {}
@@ -41,7 +45,10 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
   // 1. sanear
   $saneamiento = [
     'login' => FILTER_SANITIZE_SPECIAL_CHARS,
-    'titulo' => FILTER_SANITIZE_SPECIAL_CHARS
+    'titulo' => FILTER_SANITIZE_SPECIAL_CHARS,
+    'max_file_png' => FILTER_SANITIZE_NUMBER_INT,
+    'max_file_jpg' => FILTER_SANITIZE_NUMBER_INT,
+    'max_file_webp' => FILTER_SANITIZE_NUMBER_INT
   ];
 
   $datos_saneados = filter_input_array(INPUT_POST, $saneamiento, true);
@@ -51,9 +58,12 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
 
   $datos_validados['login'] = preg_match($login_regex, $datos_saneados['login']) ? $datos_saneados['login'] : error(1);
   $datos_validados['titulo'] = $datos_saneados['titulo'] ? $datos_saneados['titulo'] : '';
+  $datos_validados['max_file_png'] = filter_var($datos_saneados['max_file_png'], FILTER_VALIDATE_INT);
+  $datos_validados['max_file_jpg'] = filter_var($datos_saneados['max_file_jpg'], FILTER_VALIDATE_INT);
+  $datos_validados['max_file_webp'] = filter_var($datos_saneados['max_file_webp'], FILTER_VALIDATE_INT);
 
   if ($datos_validados['login'] && $_FILES['fichero']) {
-    guarda_fichero($_FILES['fichero'], $tipos_permitidos, $datos_validados['titulo']);
+    guarda_fichero($_FILES['fichero'], $tipos_permitidos, $datos_validados);
   }
 
   // 3. presentar
