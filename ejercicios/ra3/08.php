@@ -1,5 +1,4 @@
 <?php
-ob_start();
 require_once($_SERVER['DOCUMENT_ROOT'] . '/includes/funciones.php');
 
 inicio_html('08', ['/estilos/formulario.css', '/estilos/general.css', '/estilos/tabla.css']);
@@ -134,7 +133,6 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
 
 <?php
 
-ob_flush();
 
 fin_html();
 
