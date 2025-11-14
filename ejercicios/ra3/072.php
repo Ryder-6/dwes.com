@@ -43,7 +43,7 @@ function guarda_fichero($fichero, $tipos_aceptados = [], $tamanio_maximo = 1024 
   // 3. Carpeta
   if ($error == UPLOAD_ERR_OK) {
     if (!is_dir(DIRECTORIO_CURRICULUMS)) {
-      if (!mkdir(DIRECTORIO_CURRICULUMS, 0755)) {
+      if (!mkdir(DIRECTORIO_CURRICULUMS, 0755, true)) {
         error(7);
       }
     }
@@ -83,7 +83,6 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
     
     guarda_fichero($_FILES['fichero'], $TIPOS_MIME_ACEPTADOS, $TAMANIO_MAXIMO_FICHERO, $datos_validados['dni']);
   } else {
-    echo "<h3> es necesario aceptar los terminos</h3>";
   }
 ?>
 <?php
@@ -100,15 +99,16 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
     <input type="hidden" name="MAX_FILE_SIZE" value="<?= $TAMANIO_MAXIMO_FICHERO ?>">
 
     <label for="dni">dni</label>
-    <input type="text" name="dni" id="dni" value="<?= isset($datos_validados['dni']) ? $datos_validados['dni'] : '' ?>">
+    <input type="text" name="dni" id="dni" value="<?= isset($datos_validados['dni']) && !$terminos_acetados ? $datos_validados['dni'] : '' ?>">
 
     <label for="fichero">CV</label>
     <input type="file" name="fichero" id="fichero" accept="application/pdf">
 
     <label for="nombre">nombre solicitante</label>
-    <input type="text" name="nombre" id="nombre" value="<?= isset($datos_validados['nombre']) ? $datos_validados['nombre'] : '' ?>">
+    <input type="text" name="nombre" id="nombre" value="<?= isset($datos_validados['nombre']) && !$terminos_acetados ? $datos_validados['nombre'] : '' ?>">
 
     <label for="aceptacion">Aceptacion de registro de datos personales</label>
+
     <input type="checkbox" name="aceptacion" id="aceptacion" >
 
     <button type="submit">Enviar solicitud</button>
