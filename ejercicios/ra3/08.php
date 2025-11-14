@@ -14,7 +14,7 @@ function error($n_error)
   ];
 }
 
-function guarda_fichero($fichero, $tipos_permitidos, $datos_validados )
+function guarda_fichero($fichero, $tipos_permitidos, $datos_validados)
 {
   $name = $fichero['name'];
   $tmp_name = $fichero['tmp_name'];
@@ -29,16 +29,33 @@ function guarda_fichero($fichero, $tipos_permitidos, $datos_validados )
     error(2);
   }
 
-  $extension = implode('/', $type);
+  $extension = implode('/', $type)[1];
   $max_file = 'max_file_' . $extension;
 
-  if ($size > $datos_validados[$max_file] || !$datos_validados[$max_file]) {
+  if ($size > $datos_validados[$max_file]) {
     error(3);
   }
-  
+
+  if ($error == UPLOAD_ERR_OK) {
+    $directorio = DIRECTORIO_SUBIDA . '/' . $datos_validados['titulo'];
+    if (!is_dir($directorio)) {
+      if (!mkdir($directorio, 0755, true)) {
+        error(4);
+      }
+    }
+
+    if (!move_uploaded_file($tmp_name, $directorio . '/' . $name . '.' . $extension)) {
+      error(5);
+    } else {
+      $archivos_subidos[] = $name;
+    }
+  }
 }
 
 function lista_ficheros() {}
+
+
+define('DIRECTORIO_SUBIDA', $_SERVER['DOCUMENT_ROOT'] . '/ejercicios/ra3/upload08');
 
 if ($_SERVER['REQUEST_METHOD'] == 'POST') {
 
