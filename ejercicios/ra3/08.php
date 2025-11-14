@@ -1,4 +1,5 @@
 <?php
+ob_start();
 require_once($_SERVER['DOCUMENT_ROOT'] . '/includes/funciones.php');
 
 inicio_html('08', ['/estilos/formulario.css', '/estilos/general.css', '/estilos/tabla.css']);
@@ -11,11 +12,20 @@ function error($n_error)
 {
   $errores = [
     1 => 'Error, login invalido',
+    2 => 'Error, Tipo mime invalido',
+    3 => 'Error, Tamaño maximo superado',
+    4 => 'Error, En la creacion de la carpeta',
+    5 => 'Error, inesperado en la subida de fichero',
+    6 => 'Error, Tamaño invalido recibido'
   ];
+  echo "<h2>Error $n_error: $errores[$n_error]  </h2>";
+  fin_html();
+  exit();
 }
 
 function guarda_fichero($fichero, $tipos_permitidos, $datos_validados)
 {
+  global $archivos_subidos;
   $name = $fichero['name'];
   $tmp_name = $fichero['tmp_name'];
   $type = $fichero['type'];
@@ -29,7 +39,7 @@ function guarda_fichero($fichero, $tipos_permitidos, $datos_validados)
     error(2);
   }
 
-  $extension = implode('/', $type)[1];
+  $extension = explode('/', $type)[1];
   $max_file = 'max_file_' . $extension;
 
   if ($size > $datos_validados[$max_file]) {
@@ -44,7 +54,7 @@ function guarda_fichero($fichero, $tipos_permitidos, $datos_validados)
       }
     }
 
-    if (!move_uploaded_file($tmp_name, $directorio . '/' . $name . '.' . $extension)) {
+    if (!move_uploaded_file($tmp_name, $directorio . '/' . $name)) {
       error(5);
     } else {
       $archivos_subidos[] = $name;
@@ -52,7 +62,14 @@ function guarda_fichero($fichero, $tipos_permitidos, $datos_validados)
   }
 }
 
-function lista_ficheros() {}
+function lista_ficheros() {
+  global $archivos_subidos;
+
+  foreach ($archivos_subidos as $archivo) {
+    echo "<h2>$archivo</h2>";
+  }
+
+}
 
 
 define('DIRECTORIO_SUBIDA', $_SERVER['DOCUMENT_ROOT'] . '/ejercicios/ra3/upload08');
@@ -75,18 +92,17 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
 
   $datos_validados['login'] = preg_match($login_regex, $datos_saneados['login']) ? $datos_saneados['login'] : error(1);
   $datos_validados['titulo'] = $datos_saneados['titulo'] ? $datos_saneados['titulo'] : '';
-  $datos_validados['max_file_png'] = filter_var($datos_saneados['max_file_png'], FILTER_VALIDATE_INT);
-  $datos_validados['max_file_jpg'] = filter_var($datos_saneados['max_file_jpg'], FILTER_VALIDATE_INT);
-  $datos_validados['max_file_webp'] = filter_var($datos_saneados['max_file_webp'], FILTER_VALIDATE_INT);
+  $datos_validados['max_file_png'] = filter_var($datos_saneados['max_file_png'], FILTER_VALIDATE_INT)? $datos_saneados['max_file_png'] : error(6);
+  $datos_validados['max_file_jpg'] = filter_var($datos_saneados['max_file_jpg'], FILTER_VALIDATE_INT)? $datos_saneados['max_file_jpg'] : error(6) ;
+  $datos_validados['max_file_webp'] = filter_var($datos_saneados['max_file_webp'], FILTER_VALIDATE_INT)? $datos_saneados['max_file_webp'] : error(6) ;
 
   if ($datos_validados['login'] && $_FILES['fichero']) {
-    guarda_fichero($_FILES['fichero'], $tipos_permitidos, $datos_validados);
+    guarda_fichero($_FILES['fichero'], $TIPOS_MIME_PERMITIDOS, $datos_validados);
   }
 
   // 3. presentar
-
+  lista_ficheros();
 }
-
 
 ?>
 <h1>Subir archivos 08</h1>
@@ -118,7 +134,7 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
 
 <?php
 
-
+ob_flush();
 
 fin_html();
 
