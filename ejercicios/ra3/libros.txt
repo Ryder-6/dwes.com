@@ -1,0 +1,10 @@
+123-4-56789-012-3 | Ken Follet | Los pilares de la tierra | Novela histórica
+987-6-54321-098-7 | Ken Follet | La caída de los gigantes | Novela histórica
+345-1-91827-019-4 | Max Hastings | La guerra de Churchill | Biografía
+908-2-10928-374-5 | Isaac Asimov | Fundación | Fantasía
+657-4-39856-543-3 | Isaac Asimov | Yo, robot | Fantasía
+576-4-23442-998-5 | Carl Sagan | Cosmos | Divulgación científica
+398-4-92438-323-2 | Carl Sagan | La diversidad de la ciencia | Divulgación científica
+984-5-39874-209-4 | Steve Jacobson | Jobs | Biografía
+564-7-54937-300-6 | George R.R. Martin | Juego de tronos | Fantasía
+677-2-10293-833-8 | George R.R. Martin | Sueño de primavera | Fantasía
