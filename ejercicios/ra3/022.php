@@ -139,10 +139,11 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
       }
     }
   }
+  
   if (isset($datos_validados['generos'])) {
     foreach ($libros as $key => $value) {
-      foreach ($datos_validados['generos'] as $genero) {
-        if (strcasecmp($value['genero'], $genero) == 0) {
+      foreach ($$datos_validados['generos'] as $genero) {
+        if (strcasecmp($value['autor'], $autor) == 0) {
           $libros_encontrados[$key] = $value;
           
         }

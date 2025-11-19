@@ -72,14 +72,14 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
     'aceptacion' => FILTER_DEFAULT
   ];
 
-  $datos_saneados = filter_input_array(INPUT_POST, $saneamiento);
+  $datos_saneados = filter_input_array(INPUT_POST, $saneamiento, true);
 
   // 2. validacion
   $datos_validados['dni'] = preg_match($dni_regex, $datos_saneados['dni']) ? $datos_saneados['dni'] : error(1);
   $datos_validados['nombre'] = isset($datos_saneados['nombre']) && $datos_saneados['nombre'] != '' ? $datos_saneados['nombre'] : error(2);
   $datos_validados['aceptacion'] = filter_var($datos_saneados['aceptacion'], FILTER_VALIDATE_BOOLEAN);
 
-  if ($datos_saneados['aceptacion'] && $datos_validados['dni']) {
+  if ($datos_validados['aceptacion'] && $datos_validados['dni']) {
     
     guarda_fichero($_FILES['fichero'], $TIPOS_MIME_ACEPTADOS, $TAMANIO_MAXIMO_FICHERO, $datos_validados['dni']);
   } else {
