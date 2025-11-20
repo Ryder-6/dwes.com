@@ -39,10 +39,21 @@ $es_vegetariana = false;
 function error($n_error)
 {
   $errores = [
-    1 => 'es necesario nombre',
+    1 => 'Es necesario el nombre',
+    2 => 'Es necesaria la dirección',
+    3 => 'Es necesario el teléfono',
+    4 => 'Tipo de pizza no válido',
+    5 => 'Selección de ingredientes no válida',
+    6 => 'Error al procesar el fichero de socios',
+    7 => 'Fichero demasiado grande o error de subida',
+    8 => 'Tipo MIME del fichero no permitido',
+    9 => 'Error inesperado en la aplicación'
   ];
 
-  echo "<h1>Error $n_error: $errores[$n_error]</h1>";
+  ob_clean();
+  echo "<h1>Error en la aplicación</h1>";
+  echo "<h2>Código: $n_error</h2>";
+  echo "<h3>Mensaje: {$errores[$n_error]}</h3>";
   fin_html();
   exit($n_error);
 }
@@ -136,8 +147,48 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
 
   
   if ($es_socio) $precio_final_unidad *= DESCUENTO_SOCIOS;
-  
+
   $precio_final_total = $precio_final_unidad * $datos_validados['n_pizzas'];
+
+  ?>
+    <table border="1">
+      <thead>
+        <tr>
+          <th>Nombre</th>
+          <th>Direccion</th>
+          <th>Telefono</th>
+          <th>Tipo</th>
+          <th>Ingredientes</th>
+          <th>Extra Queso</th>
+          <th>Bordes rellenos</th>
+          <th>Nº Pizzas</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr>
+          <td><?=$datos_validados['nombre']?></td>
+          <td><?=$datos_validados['direccion']?></td>
+          <td><?=$datos_validados['telefono']?></td>
+          <td><?=$datos_validados['tipo'] ? 'Vegetariana' : 'No Vegetariana' ?></td>
+          <td>
+            <?php foreach ($datos_validados['ingredientes'] as $key => $value): ?>
+              - <?=$value['name']?> => <?=$value['precio']?> <br>
+            <?php endforeach; ?>
+
+          </td>
+          <td><?=$datos_validados['extra_queso'] ? 'Si' : 'No'?></td>
+          <td><?=$datos_validados['bordes'] ? 'Si' : 'No'?></td>
+          <td><?=$datos_validados['n_pizzas']?></td>
+        </tr>
+
+      </tbody>
+    </table>
+    <h1>Precio unidad: <?=$precio_final_unidad?></h1>
+    <h1>Precio total: <?=$precio_final_total?></h1>
+    <h3><?= $es_socio ? 'Es socio' : 'no es socio' ?></h3>
+  <?php
+
+
 }
 
 ?>
