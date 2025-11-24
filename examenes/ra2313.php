@@ -2,7 +2,7 @@
 
 require_once($_SERVER['DOCUMENT_ROOT'] . '/exra2313/includes/funciones.php');
 
-inicioHtml("examen 23 13", ['/exra2313/estilos/formulario.css', '/exra2313/estilos/general.css', '/exra2313/estilos/tabla.css']);
+inicio_html("examen 23 13", ['/exra2313/estilos/formulario.css', '/exra2313/estilos/general.css', '/exra2313/estilos/tabla.css']);
 
 
 $cursos = [
@@ -30,7 +30,7 @@ function error($n_error)
   <a href="<?= $_SERVER['PHP_SELF'] ?>"> volver a intentarlo</a>
   <?php
 
-  finHtml();
+  fin_html();
   exit($n_error);
 }
 
@@ -220,6 +220,6 @@ if ($_SERVER['REQUEST_METHOD'] == 'GET') {
 
 }
 
-finHtml();
+fin_html();
 
 ?>
