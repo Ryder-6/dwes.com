@@ -23,7 +23,7 @@ if (!$usuario) {
 }
 
 
-inicio_html("02 Pantalla tipos", ['/estilos/formulario.css', '/estilos/general.css', '/estilos/tabla.css']);
+inicio_html("03 Pantalla tipos", ['/estilos/formulario.css', '/estilos/general.css', '/estilos/tabla.css']);
 
 ?>
 <h1>Bienvenido <?= $usuario['nombre'] ?></h1>
@@ -35,17 +35,17 @@ inicio_html("02 Pantalla tipos", ['/estilos/formulario.css', '/estilos/general.c
 <fieldset>
   <legend>Tipo de pizza</legend>
   <form action="04ingredientes.php" method="POST">
-  <div>
-    <label for="tipo">Vegetariana</label>
-    <input type="radio" name="tipo" id="tipo" value="1">
-
-  </div>
     <div>
-    <label for="tipo">NO-Vegetariana</label>
-    <input type="radio" name="tipo" id="tipo" value="0">
-  </div>
+      <label for="tipo">Vegetariana</label>
+      <input type="radio" name="tipo" id="tipo" value="1">
 
-  <button type="submit" name="operacion" id="operacion" value="enviar">enviar</button>
+    </div>
+    <div>
+      <label for="tipo">NO-Vegetariana</label>
+      <input type="radio" name="tipo" id="tipo" value="0">
+    </div>
+
+    <button type="submit" name="operacion" id="operacion" value="enviar">enviar</button>
   </form>
 </fieldset>
 <?php

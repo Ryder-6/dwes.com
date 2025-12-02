@@ -3,7 +3,6 @@
 
 session_start();
 require_once($_SERVER['DOCUMENT_ROOT'] . '/includes/funciones.php');
-require_once('fun.php');
 
 
 // LIMPIAR SESION
@@ -47,7 +46,7 @@ inicio_html("01 Pantalla inicial", ['/estilos/formulario.css', '/estilos/general
     <label for="pass">password</label>
     <input type="password" name="pass" id="pass">
 
-    <button type="submit">Iniciar sesion</button>
+    <button type="submit" name="operacion" id="operacion" value="login">Iniciar sesion</button>
   </form>
 </fieldset>
 
