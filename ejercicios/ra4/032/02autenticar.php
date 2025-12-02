@@ -10,8 +10,10 @@ $pass = $_POST['pass'];
 if (!$email) $_SESSION['errores'][] = 'Email, no enviado';
 if (!$pass) $_SESSION['errores'][] = 'Contraseña, no enviada';
 
-if (isset($_SESSION['errores'])) header("Location: 01login.php");
-
+if (isset($_SESSION['errores'])) {
+  header('Location: 01login.php');
+  exit();
+}
 
 
 // 2. validar login
@@ -37,14 +39,16 @@ $usuarios = [
   ]
 ];
 
-if (!array_keys($usuarios, $email)) {
+if (!array_key_exists($email, $usuarios)) {
   $_SESSION['errores'][] = "el usuario $email no existe";
   header("Location: 01login.php");
+  exit();
 }
 
 if (!password_verify($pass, $usuarios[$email]['pass'])) {
   $_SESSION['errores'][] = 'la contraseña no es valida';
   header("Location: 01login.php");
+  exit();
 }
 
 
