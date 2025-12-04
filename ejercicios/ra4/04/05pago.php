@@ -18,7 +18,7 @@ if (!$usuario) {
   header('location: 01login.php');
   exit();
 }
-
+echo 'holi';
 if ($_SERVER['REQUEST_METHOD'] == 'POST' && $_POST['operacion'] == 'extras') {
   $extras_saneados = filter_input(INPUT_POST, 'extras', FILTER_SANITIZE_SPECIAL_CHARS, ['flags' => FILTER_REQUIRE_ARRAY]);
   $pintura_saneada = filter_input(INPUT_POST, 'pintura', FILTER_SANITIZE_SPECIAL_CHARS);
@@ -49,8 +49,10 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST' && $_POST['operacion'] == 'extras') {
     <legend>Extras el modelo <?= $_SESSION['modelo']['name'] ?></legend>
     <form action="06final.php" method="POST">
       <?php foreach ($financiacion as $key => $value) :  ?>
-        <label for="pago"><?= $value['name'] ?> => <?= $key['anios'] ?></label>
-        <input type="radio" name="pago" id="pago" value="<?= $key ?>">;
+        <div>
+        <label for="pago"><?= $value['name'] ?> => <?= $value['anios'] ?></label>
+        <input type="radio" name="pago" id="pago" value="<?= $key ?>">
+        </div>
       <?php endforeach ?>
 
       <button type="submit" name="operacion" id="operacion" value="pago"> Final</button>
@@ -58,6 +60,8 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST' && $_POST['operacion'] == 'extras') {
   </fieldset>
 <?php
   fin_html();
+}else {
+  # code...
+  header('location: 01login.php');
 }
-header('location: 01login.php')
 ?>

@@ -44,9 +44,10 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST' && $_POST['operacion'] == 'pago') {
   }
 
   // calculo de cuotas
+  $pago = $financiacion[$pago];
   $cuota_inicial = $precio_total * 0.75;
   $cuota_final = $precio_total * 0.75;
-  $n_cuotas = $_SESSION['precio']['anios'] * 12;
+  $n_cuotas = $pago['anios'] * 12;
   $precio_x_cuota = round((($cuota_final + $cuota_inicial) - $precio_total) / $n_cuotas, 2);
 
   $fechas_pago = [];
@@ -54,7 +55,7 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST' && $_POST['operacion'] == 'pago') {
 
   for ($i = 1; $i <= $n_cuotas; $i++) {
     $fecha->modify('+1 month');
-    $fechas_pago[] = $fecha;
+    $fechas_pago[] = clone($fecha);
   }
 
   inicio_html("06 Pantalla presupuesto", ['/estilos/formulario.css', '/estilos/general.css', '/estilos/tabla.css']);
@@ -86,11 +87,11 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST' && $_POST['operacion'] == 'pago') {
           if (isset($_SESSION['extras'])) {
             foreach ($_SESSION['extras'] as $key => $value) :
           ?>
-          - <?= $value['name'] ?> => <?= $value['precio'] ?>
+              - <?= $value['name'] ?> => <?= $value['precio'] ?>
           <?php
             endforeach;
-          }else{
-          echo 'no extras seleccionados';
+          } else {
+            echo 'no extras seleccionados';
           }
           ?>
         </td>
@@ -113,13 +114,15 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST' && $_POST['operacion'] == 'pago') {
     </thead>
     <tbody>
       <?php foreach ($fechas_pago as $key) : ?>
+        <tr></tr>
         <td><?= $key->format('d-m-Y') ?></td>
         <td><?= $precio_x_cuota ?></td>
-        <?php endforeach ?>
+        </tr>
+      <?php endforeach ?>
     </tbody>
   </table>
 
-  <form action="01login" method="get">
+  <form action="01login.php" method="GET">
     <button type="submit" name="operacion" id="operacion" value="cerrar">nuevo presupuesto</button>
   </form>
 <?php

@@ -14,11 +14,11 @@ if ($_SERVER['REQUEST_METHOD'] == 'GET') {
   
     setcookie($id, '', 0, $param['path'], $param['domain'], $param['secure'], $param['httponly']);
   
-    session_unset();
     session_destroy();
   
     unset($_SESSION);
-  
+
+    setcookie('jwt', '', 0, '/');
   
     session_start();
   }
